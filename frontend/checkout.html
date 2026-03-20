@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finalizar inscrição</title>
+  <style>
+    :root {
+      --bg: #fff8fb;
+      --card: #ffffff;
+      --text: #1f1a24;
+      --muted: #6f6577;
+      --brand: #e94e88;
+      --brand-2: #ff7aa7;
+      --line: #f1d7e2;
+      --ok: #146c43;
+      --warn: #8a5a00;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, var(--bg), #ffffff);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 16px 80px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #ffe7f0;
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    h1 {
+      font-size: 36px;
+      line-height: 1.1;
+      margin: 16px 0 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 0 0 16px;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    .summary-row,
+    .buyer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .summary-row:last-child,
+    .buyer-row:last-child {
+      border-bottom: 0;
+    }
+
+    .strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .price {
+      font-size: 34px;
+      color: var(--brand);
+      font-weight: 800;
+      margin: 6px 0 18px;
+    }
+
+    .qr-box {
+      display: grid;
+      gap: 16px;
+      place-items: center;
+      padding: 20px;
+      border: 1px dashed var(--line);
+      border-radius: 20px;
+      background: #fffafd;
+      min-height: 260px;
+    }
+
+    .qr-box img {
+      max-width: 250px;
+      width: 100%;
+      height: auto;
+    }
+
+    .copy-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      resize: vertical;
+      font-size: 14px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 18px;
+      background: var(--brand);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #fff;
+      color: var(--brand);
+      border: 1px solid var(--line);
+    }
+
+    .status {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff6e6;
+      color: var(--warn);
+      font-weight: 700;
+    }
+
+    .status.ok {
+      background: #e9fff2;
+      color: var(--ok);
+    }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .num {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #ffe7f0;
+      color: var(--brand);
+      font-weight: 800;
+    }
+
+    .timer {
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: var(--brand);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    #payCcBtn {
+      width: 100%;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 860px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="grid">
+      <section class="card">
+        <span class="badge">Inscrição segura</span>
+        <h1>Finalize sua inscrição na Operação Seca 21</h1>
+        <p>Finalize seu Pix para garantir sua vaga no desafio com a Nutri Júlia Mara.</p>
+
+        <div class="price" id="amountText">R$ 59,00</div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <div>
+              <div class="strong">Escaneie o QR Code</div>
+              <p>Use o aplicativo do seu banco para pagar com Pix.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <div>
+              <div class="strong">Ou copie o código</div>
+              <p>Toque em copiar e cole no seu app bancário.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <div>
+              <div class="strong">Aguarde a confirmação</div>
+              <p>Assim que o pagamento cair, você será encaminhada para a próxima etapa.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="timer" id="expirationText"></div>
+      </section>
+
+      <aside class="card">
+        <h2>Pagamento</h2>
+
+        <div class="tabs">
+          <button type="button" class="tab active" id="tabPix">Pix</button>
+          <button type="button" class="tab" id="tabCc">Cartão</button>
+        </div>
+
+        <div id="pixSection">
+          <div id="pixIntro">
+            <p style="margin-bottom: 20px;">Clique no botão abaixo para gerar o seu QR Code do Pix e garantir sua vaga.
+            </p>
+            <button id="generatePixBtn" type="button" style="width: 100%; font-size: 16px;">Gerar Código Pix</button>
+          </div>
+
+          <div id="pixGenerated" class="hidden">
+            <div class="qr-box" id="qrBox"></div>
+            <div class="copy-group">
+              <textarea id="pixPayload" readonly placeholder="Seu código Pix aparecerá aqui"></textarea>
+              <button id="copyBtn" type="button">Copiar</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="ccSection" class="hidden">
+          <div class="form-group">
+            <label for="ccNumber">Número do Cartão</label>
+            <input type="text" id="ccNumber" placeholder="0000 0000 0000 0000" maxlength="19" />
+          </div>
+          <div class="form-group">
+            <label for="ccName">Nome Impresso no Cartão</label>
+            <input type="text" id="ccName" placeholder="Como está no cartão" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ccExpiry">Validade (MM/AAAA)</label>
+              <input type="text" id="ccExpiry" placeholder="MM/AAAA" maxlength="7" />
+            </div>
+            <div class="form-group">
+              <label for="ccCvv">CVV</label>
+              <input type="text" id="ccCvv" placeholder="123" maxlength="4" />
+            </div>
+          </div>
+
+          <div style="margin: 20px 0; border-top: 1px dashed var(--line);"></div>
+          <h3 style="font-size: 14px; margin: 0 0 12px; color: var(--muted);">Dados obrigatórios do titular</h3>
+
+          <div class="form-group">
+            <label for="ccCpf">CPF</label>
+            <input type="text" id="ccCpf" placeholder="000.000.000-00" maxlength="14" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ccCep">CEP</label>
+              <input type="text" id="ccCep" placeholder="00000-000" maxlength="9" />
+            </div>
+            <div class="form-group">
+              <label for="ccNumberAddr">Número (Endereço)</label>
+              <input type="text" id="ccNumberAddr" placeholder="Ex: 123" />
+            </div>
+          </div>
+
+          <button id="payCcBtn" type="button">Finalizar Pagamento</button>
+        </div>
+
+        <div class="status" id="statusBox">Escolha sua forma de pagamento.</div>
+      </aside>
+    </div>
+
+    <div class="grid" style="margin-top:24px;">
+      <section class="card">
+        <h2>Seus dados</h2>
+        <div class="buyer-row"><span>Nome</span><strong id="buyerName">-</strong></div>
+        <div class="buyer-row"><span>E-mail</span><strong id="buyerEmail">-</strong></div>
+        <div class="buyer-row"><span>Telefone</span><strong id="buyerPhone">-</strong></div>
+      </section>
+
+      <section class="card">
+        <h2>Resumo do pedido</h2>
+        <div class="summary-row"><span>Produto</span><strong class="strong">Operação Seca 21</strong></div>
+        <div class="summary-row"><span>Pagamento</span><strong class="strong">Pix</strong></div>
+        <div class="summary-row"><span>Total</span><strong class="strong" id="orderTotal">R$ 59,00</strong></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/js/config.js"></script>
+  <script type="module" src="./assets/js/checkout.js"></script>
+</body>
+
+</html>

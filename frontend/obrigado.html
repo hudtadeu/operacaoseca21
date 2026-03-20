@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pagamento confirmado</title>
+  <style>
+    :root {
+      --brand: #e94e88;
+      --line: #f1d7e2;
+      --text: #1f1a24;
+      --muted: #6f6577;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #fff8fb;
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 16px 80px;
+    }
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.05);
+      text-align: center;
+    }
+    h1 { font-size: 36px; margin: 0 0 12px; }
+    p { color: var(--muted); font-size: 18px; line-height: 1.55; }
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 16px 22px;
+      background: var(--brand);
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 18px;
+    }
+    .hidden { display: none; }
+    .meta {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+    }
+    .row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Pagamento confirmado 🎉</h1>
+      <p id="message">Estamos validando seu acesso à próxima etapa.</p>
+      <button id="goTypebotBtn" class="hidden" type="button">Ir para a próxima etapa</button>
+
+      <div class="meta">
+        <div class="row"><span>Nome</span><strong id="buyerName">-</strong></div>
+        <div class="row"><span>E-mail</span><strong id="buyerEmail">-</strong></div>
+        <div class="row"><span>Status</span><strong id="buyerStatus">-</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/js/config.js"></script>
+  <script type="module" src="./assets/js/obrigado.js"></script>
+</body>
+</html>

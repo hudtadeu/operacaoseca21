@@ -1,0 +1,108 @@
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.fade-in-up {
+  animation: fadeUp 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mobile-menu-panel {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.mobile-menu-panel.is-open {
+  max-height: 320px;
+  opacity: 1;
+}
+
+.checkout-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+}
+
+.checkout-modal.is-open {
+  display: flex;
+}
+
+.checkout-dialog {
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 2rem;
+  background: #fff;
+  border: 1px solid rgba(244, 114, 182, 0.18);
+  box-shadow: 0 25px 80px rgba(15, 23, 42, 0.18);
+}
+
+.checkout-input {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: #334155;
+  background: #fff;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.checkout-input:focus {
+  outline: none;
+  border-color: #e94e88;
+  box-shadow: 0 0 0 4px rgba(233, 78, 136, 0.12);
+}
+
+.modal-hidden {
+  overflow: hidden;
+}
+
+.form-error {
+  display: none;
+}
+
+.form-error.is-visible {
+  display: block;
+}
