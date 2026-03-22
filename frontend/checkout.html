@@ -271,6 +271,125 @@
         font-size: 30px;
       }
     }
+
+    /* ── Success Overlay ─────────────────────────── */
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .4s, visibility .4s;
+    }
+    .success-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .success-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 40px 28px 32px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,.18);
+      transform: translateY(40px) scale(.92);
+      transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+    }
+    .success-overlay.visible .success-card {
+      transform: translateY(0) scale(1);
+    }
+
+    /* Animated checkmark */
+    .check-circle {
+      width: 88px; height: 88px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #34d399, #10b981);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(16,185,129,.35);
+      animation: popIn .5s .15s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .check-circle svg {
+      width: 44px; height: 44px;
+      stroke: #fff; stroke-width: 3;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 60; stroke-dashoffset: 60;
+    }
+    .success-overlay.visible .check-circle svg {
+      animation: drawCheck .5s .45s ease-out forwards;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); } to { transform: scale(1); }
+    }
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .success-card h2 {
+      font-size: 22px;
+      margin: 0 0 6px;
+      color: var(--text);
+    }
+    .success-card .success-sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 24px;
+      line-height: 1.5;
+    }
+    .success-card .success-name {
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    /* Countdown progress bar */
+    .countdown-wrap {
+      background: #f1f5f9;
+      border-radius: 999px;
+      height: 6px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .countdown-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      border-radius: 999px;
+      transform-origin: left;
+      transition: transform .1s linear;
+    }
+    .countdown-text {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .countdown-text strong {
+      color: var(--text);
+    }
+
+    /* Confetti burst */
+    .confetti-container {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 10000;
+      overflow: hidden;
+    }
+    .confetti {
+      position: absolute;
+      width: 8px; height: 14px;
+      border-radius: 2px;
+      top: -20px;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
   </style>
 </head>
 
@@ -396,6 +515,20 @@
       </section>
     </div>
   </div>
+
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-card">
+      <div class="check-circle">
+        <svg viewBox="0 0 44 44"><polyline points="12 23 20 31 33 14"/></svg>
+      </div>
+      <h2>Pagamento Confirmado!</h2>
+      <p class="success-sub">Parabéns, <span class="success-name" id="successBuyerName"></span>! Sua inscrição foi realizada com sucesso. Você será redirecionada automaticamente.</p>
+      <div class="countdown-wrap"><div class="countdown-bar" id="countdownBar"></div></div>
+      <p class="countdown-text">Redirecionando em <strong id="countdownNum">4</strong>s...</p>
+    </div>
+  </div>
+  <div class="confetti-container" id="confettiContainer"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./assets/js/config.js"></script>

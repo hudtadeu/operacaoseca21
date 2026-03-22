@@ -161,8 +161,8 @@ payCcBtn.addEventListener('click', async () => {
     }
 
     if (data.status === 'CONFIRMED' || data.status === 'RECEIVED') {
-      setStatus('Pagamento confirmado. Redirecionando...', true);
-      window.location.href = `./obrigado.html?order=${encodeURIComponent(data.orderToken)}`;
+      setStatus('Pagamento confirmado!', true);
+      showSuccessAndRedirect();
     } else {
       setStatus('Pagamento em análise ou concluído pendente de retorno. Aguarde um momento.', true);
       startPolling(data.orderToken);
@@ -248,8 +248,8 @@ function startPolling(orderToken) {
 
       if (data.status === 'paid') {
         clearInterval(interval);
-        setStatus('Pagamento confirmado. Redirecionando...', true);
-        window.location.href = `./obrigado.html?order=${encodeURIComponent(orderToken)}`;
+        setStatus('Pagamento confirmado!', true);
+        showSuccessAndRedirect();
       } else if (data.status === 'expired' || data.status === 'deleted') {
         clearInterval(interval);
         setStatus('Sua cobrança não está mais disponível. Gere uma nova cobrança.');
@@ -282,4 +282,79 @@ function updateExpirationText(expirationDate) {
   const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
   const seconds = String(totalSeconds % 60).padStart(2, '0');
   expirationText.textContent = `Expira em ${hours}:${minutes}:${seconds}`;
+}
+
+function buildTypebotUrl() {
+  const url = new URL('https://atendimento.juliamaranutricionista.com.br/');
+  url.searchParams.set('nome_completo', buyer.name);
+  url.searchParams.set('email', buyer.email);
+  url.searchParams.set('telefone', buyer.phone.replace(/\D/g, ''));
+  return url.toString();
+}
+
+function showSuccessAndRedirect() {
+  const COUNTDOWN_SECONDS = 4;
+  const overlay = document.getElementById('successOverlay');
+  const bar = document.getElementById('countdownBar');
+  const numEl = document.getElementById('countdownNum');
+  const nameEl = document.getElementById('successBuyerName');
+
+  // Show buyer's first name
+  const firstName = buyer.name.split(' ')[0];
+  nameEl.textContent = firstName || buyer.name;
+
+  // Reveal overlay
+  overlay.classList.add('visible');
+  spawnConfetti();
+
+  // Haptic feedback (mobile)
+  if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+  // Countdown
+  let remaining = COUNTDOWN_SECONDS;
+  numEl.textContent = remaining;
+
+  const start = performance.now();
+  const totalMs = COUNTDOWN_SECONDS * 1000;
+
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / totalMs, 1);
+    bar.style.transform = `scaleX(${1 - progress})`;
+
+    const secs = Math.ceil((totalMs - elapsed) / 1000);
+    if (secs !== remaining && secs >= 0) {
+      remaining = secs;
+      numEl.textContent = remaining;
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      window.location.href = buildTypebotUrl();
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+function spawnConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#e94e88', '#ff7aa7', '#34d399', '#fbbf24', '#60a5fa', '#a78bfa', '#fb923c'];
+  const count = 60;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.style.left = `${Math.random() * 100}%`;
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.width = `${6 + Math.random() * 6}px`;
+    el.style.height = `${10 + Math.random() * 8}px`;
+    el.style.animationDuration = `${1.5 + Math.random() * 2}s`;
+    el.style.animationDelay = `${Math.random() * 0.6}s`;
+    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(el);
+  }
+
+  // Clean up after animations finish
+  setTimeout(() => { container.innerHTML = ''; }, 4500);
 }
