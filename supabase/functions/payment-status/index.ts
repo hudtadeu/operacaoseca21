@@ -21,12 +21,24 @@ Deno.serve(async (req) => {
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from('orders')
-      .select('public_token, buyer_name, buyer_email, buyer_phone, status, released_to_typebot')
+      .select('public_token, buyer_name, buyer_email, buyer_phone, status, released_to_typebot, asaas_payment_id')
       .eq('public_token', order)
       .single();
 
     if (error || !data) {
       return json({ error: 'Pedido não encontrado' }, 404);
+    }
+
+    // Fallback: if still pending locally, check Asaas directly
+    if (data.status === 'pending' && data.asaas_payment_id) {
+      const asaasStatus = await checkAsaasPayment(data.asaas_payment_id);
+      if (asaasStatus === 'RECEIVED' || asaasStatus === 'CONFIRMED') {
+        await supabase
+          .from('orders')
+          .update({ status: 'paid', paid_at: new Date().toISOString(), asaas_payment_status: asaasStatus })
+          .eq('public_token', order);
+        data.status = 'paid';
+      }
     }
 
     const typebotBaseUrl = Deno.env.get('TYPEBOT_URL') || '';
@@ -63,4 +75,24 @@ function json(data: unknown, status = 200) {
       'Content-Type': 'application/json',
     },
   });
+}
+
+async function checkAsaasPayment(paymentId: string): Promise<string | null> {
+  const baseUrl = Deno.env.get('ASAAS_API_BASE_URL');
+  const apiKey = Deno.env.get('ASAAS_API_KEY');
+  if (!baseUrl || !apiKey) return null;
+
+  try {
+    const response = await fetch(`${baseUrl}/payments/${paymentId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'access_token': apiKey,
+      },
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data?.status ?? null;
+  } catch {
+    return null;
+  }
 }
