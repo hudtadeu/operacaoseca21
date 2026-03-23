@@ -16,7 +16,7 @@ call npx.cmd supabase functions deploy payment-status
 
 echo.
 echo === IMPLANTANDO ASAAS-WEBHOOK ===
-call npx.cmd supabase functions deploy asaas-webhook
+call npx.cmd supabase functions deploy asaas-webhook --no-verify-jwt
 
 echo.
 echo Processo concluido! Caso tenha falhado, verifique se seu Docker
