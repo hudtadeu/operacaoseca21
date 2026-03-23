@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
 
     const typebotBaseUrl = Deno.env.get('TYPEBOT_URL') || '';
     const typebotUrl = data.status === 'paid'
-      ? `${typebotBaseUrl}?nome=${encodeURIComponent(data.buyer_name)}&email=${encodeURIComponent(data.buyer_email)}&telefone=${encodeURIComponent(data.buyer_phone)}`
+      ? `${typebotBaseUrl}?nome_completo=${encodeURIComponent(data.buyer_name)}&email=${encodeURIComponent(data.buyer_email)}&telefone=${encodeURIComponent(data.buyer_phone.replace(/\D/g, ''))}`
       : null;
 
     return json({
