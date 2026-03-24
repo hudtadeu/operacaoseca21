@@ -161,7 +161,7 @@ payCcBtn.addEventListener('click', async () => {
     }
 
     if (data.status === 'CONFIRMED' || data.status === 'RECEIVED') {
-      setStatus('Pagamento confirmado!', true);
+      setStatus('Pagamento confirmado! Aguarde o redirecionamento...', true);
       showSuccessAndRedirect();
     } else {
       setStatus('Pagamento em análise ou concluído pendente de retorno. Aguarde um momento.', true);
@@ -248,7 +248,7 @@ function startPolling(orderToken) {
 
       if (data.status === 'paid') {
         clearInterval(interval);
-        setStatus('Pagamento confirmado!', true);
+        setStatus('Pagamento confirmado! Aguarde o redirecionamento...', true);
         showSuccessAndRedirect();
       } else if (data.status === 'expired' || data.status === 'deleted') {
         clearInterval(interval);
